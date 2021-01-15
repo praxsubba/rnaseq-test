@@ -5,6 +5,7 @@
 wget http://www.homd.org/ftp/HOMD_prokka_genomes/gff/ALL_genomes.gff
 wget http://www.homd.org/ftp/HOMD_prokka_genomes/fna/ALL_genomes.fna
 # test dataset
+# CHANGE THIS TO YOUR DATASET
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR340/004/SRR3404944/SRR3404944_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR340/004/SRR3404944/SRR3404944_2.fastq.gz
 # get 16S rRNA database
