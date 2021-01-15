@@ -69,7 +69,12 @@ STAR --runThreadN 8 \
 	--outFileNamePrefix star-results \
 	--outSAMtype BAM SortedByCoordinate \
 	--outReadsUnmapped unmapped.bam \
-	--quantMode GeneCounts \
-	--alignIntronMax 1
+	--quantMode TranscriptomeSAM GeneCounts \
+	--alignIntronMax 1 \
+	--chimOutType SeparateSAMold 
+
+## TO DO: Add alignment to human genome step to identify/filter human transcripts?
+## TO DO: Taxonomic analysis using filtered 16S rRNA reads
+## TO DO: Add in fungal/viral genomes for analysis
 
 
