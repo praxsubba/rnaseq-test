@@ -69,6 +69,7 @@ STAR --runThreadN 8 \
 	--outFileNamePrefix star-results \
 	--outSAMtype BAM SortedByCoordinate \
 	--outReadsUnmapped unmapped.bam \
-	--quantMode GeneCounts
+	--quantMode GeneCounts \
+	--alignIntronMax 1
 
 
