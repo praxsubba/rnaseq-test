@@ -36,12 +36,12 @@ ls *1.trim.fastq | sed 's/\..*trim.fastq//' | parallel 'pear -f {}.1.trim.fastq 
 # rRNA FILTER
 #############
 # identify rRNA sequences
-ls *assembled.fastq | parallel 'sortmerna --ref set1-database.fasta --reads {} --fastx --workdir /home/allie/project/rnaseq_test/sortmerna'
+ls *.fastq.gz_trim.fastq | sed 's/.fastq.gz_trim.fastq//' | parallel 'sortmerna --ref set1-database.fasta --reads {} --fastx --workdir /home/prakrit/merged_fastq_files/sortmerna_{}' 
 # filter rRNA sequences from dataset
 cd sortmerna/out/
-seqtk seq -a aligned.fastq > aligned.fasta
+seqtk seq -a aligned.fastq > aligned.fasta 
 # how many 16S sequences?
-grep "^>" aligned.fasta -c
+grep "^>" aligned.fasta -c 
 # 1360474
 grep "^>" aligned.fasta | sed 's/>//' | awk '{print $1}' > aligned.16S.ids
 cd ../..
