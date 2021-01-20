@@ -31,6 +31,7 @@ ls *fastq.gz | parallel 'fastqc {}'
 ls *1*fastq.gz | sed 's/_.*.fastq.gz//' | parallel 'cutadapt -o {}.1.trim.fastq -p {}.2.trim.fastq --trim-n --minimum-length 50 --max-n 0 -q 30,30 {}_1.fastq.gz {}_2.fastq.gz 1>{}.trim.out'
 # merge reads and further quality filter
 ls *1.trim.fastq | sed 's/\..*trim.fastq//' | parallel 'pear -f {}.1.trim.fastq -r {}.2.trim.fastq -o {}.merge.fastq  -q 30 -j 4'
+# All trimmed files were merged using cat and saved as project_merged_trimmed.fastq
 
 #############
 # rRNA FILTER
@@ -40,6 +41,7 @@ ls *.fastq.gz_trim.fastq | sed 's/.fastq.gz_trim.fastq//' | parallel 'sortmerna 
 # filter rRNA sequences from dataset
 cd sortmerna/out/
 seqtk seq -a aligned.fastq > aligned.fasta 
+
 # how many 16S sequences?
 grep "^>" aligned.fasta -c 
 #ERR348407: 6104949 
@@ -58,6 +60,7 @@ grep "^>" aligned.fasta -c
 #ERR348420: 4638782 
 #ERR348421: 5078364 
 #ERR348422: 5435179 
+# All the aligned files were eventually merged using cat and saved as project_aligned.16s.ids
 grep "^>" aligned.fasta | sed 's/>//' | awk '{print $1}' > aligned.16S.ids
 cd ../..
 seqtk subseq SRR1646851.merge.fastq.assembled.fastq sortmerna/out/aligned.16S.ids > filtered.16S.fastq
