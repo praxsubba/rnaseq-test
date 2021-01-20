@@ -64,11 +64,11 @@ grep "^>" aligned.fasta -c
 grep "^>" aligned.fasta | sed 's/>//' | awk '{print $1}' > aligned.16S.ids
 cd ../..
 seqtk subseq SRR1646851.merge.fastq.assembled.fastq sortmerna/out/aligned.16S.ids > filtered.16S.fastq
-seqtk subseq project_merged_trimmed.fastq project_aligned.16s.ids > project_filtered.16S.fastq 
+seqtk subseq ERR3484xx.fastq.gz_trim.fastq sortmerna_ERR3484xx/out/aligned.16S.ids > project_filtered.16S.fastq # I did this for each read individually, hence, "xx"
 # remove 16S seqs from full dataset
 awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' SRR1646851.merge.fastq.assembled.fastq | grep -Ff sortmerna/out/aligned.16S.ids - | tr "\t" "\n" > filtered.fastq
-awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' project_merged_trimmed.fastq | grep -Ff project_aligned.16s.ids - | tr "\t" "\n" > project_filtered.fastq
-
+awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' ERR3484xx.fastq.gz_trim.fastq | grep -Ff sortmerna_ERR3484xx/out/aligned.16S.ids - | tr "\t" "\n" > ERR348412_filtered.fastq
+# I did this for each read individually, hence, "xx"
 ###########
 # ALIGNMENT
 ###########
