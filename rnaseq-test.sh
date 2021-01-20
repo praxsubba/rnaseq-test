@@ -67,14 +67,14 @@ grep "^>" aligned.fasta | sed 's/>//' | awk '{print $1}' > aligned.16S.ids
 cat sortmerna_ERR3484xx/out/aligned.16s.ids >  project_aligned.16s.ids #xx = 07 until 22
 
 cd ../..
-seqtk subseq SRR1646851.merge.fastq.assembled.fastq sortmerna/out/aligned.16S.ids > filtered.16S.fastq
-seqtk subseq project_merged_trimmed.fastq project_aligned.16s.ids > project_filtered.16S.fastq 
+seqtk subseq SRR1646851.merge.fastq.assembled.fastq sortmerna/out/aligned.16S.ids > filtered.16S.fastq #Allie
+seqtk subseq project_merged_trimmed.fastq project_aligned.16s.ids > project_filtered.16S.fastq #Prax
 # The above line worked and generated an output file called "project_filtered.16S.fastq". However, this output file failed to work in the awk command below this (to remove 16s sequences).
 #Therefore, I will probably have to re-do this for each individual file, if necessary. Why? Because this file contains all the 16s ids along with their sequences.
 
 # remove 16S seqs from full dataset
-awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' SRR1646851.merge.fastq.assembled.fastq | grep -Ff sortmerna/out/aligned.16S.ids - | tr "\t" "\n" > filtered.fastq
-awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' ERR3484xx.fastq.gz_trim.fastq | grep -Ff sortmerna_ERR3484xx/out/aligned.16S.ids - | tr "\t" "\n" > ERR3484xx_filtered.fastq
+awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' SRR1646851.merge.fastq.assembled.fastq | grep -Ff sortmerna/out/aligned.16S.ids - | tr "\t" "\n" > filtered.fastq #Allie
+awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' ERR3484xx.fastq.gz_trim.fastq | grep -Ff sortmerna_ERR3484xx/out/aligned.16S.ids - | tr "\t" "\n" > ERR3484xx_filtered.fastq #Prax
 # I did this for each read individually, hence, "xx"
 
 #The next step is to merge all the ERR3484xx_filtered.fastq files into one file to use later on. 
