@@ -32,6 +32,7 @@ ls *1*fastq.gz | sed 's/_.*.fastq.gz//' | parallel 'cutadapt -o {}.1.trim.fastq 
 # merge reads and further quality filter
 ls *1.trim.fastq | sed 's/\..*trim.fastq//' | parallel 'pear -f {}.1.trim.fastq -r {}.2.trim.fastq -o {}.merge.fastq  -q 30 -j 4'
 # All trimmed files were merged using cat and saved as project_merged_trimmed.fastq
+cat ERR3484xx.fastq.gz_trim.fastq >  project_merged_trimmed.fastq #xx = 07 until 22
 
 #############
 # rRNA FILTER
@@ -60,15 +61,25 @@ grep "^>" aligned.fasta -c
 #ERR348420: 4638782 
 #ERR348421: 5078364 
 #ERR348422: 5435179 
-# All the aligned files were eventually merged using cat and saved as project_aligned.16s.ids
+
 grep "^>" aligned.fasta | sed 's/>//' | awk '{print $1}' > aligned.16S.ids
+# All the aligned files were eventually merged using cat and saved as project_aligned.16s.ids
+cat sortmerna_ERR3484xx/out/aligned.16s.ids >  project_aligned.16s.ids #xx = 07 until 22
+
 cd ../..
 seqtk subseq SRR1646851.merge.fastq.assembled.fastq sortmerna/out/aligned.16S.ids > filtered.16S.fastq
-seqtk subseq ERR3484xx.fastq.gz_trim.fastq sortmerna_ERR3484xx/out/aligned.16S.ids > project_filtered.16S.fastq # I did this for each read individually, hence, "xx"
+seqtk subseq project_merged_trimmed.fastq project_aligned.16s.ids > project_filtered.16S.fastq 
+# The above line worked and generated an output file called "project_filtered.16S.fastq". However, this output file failed to work in the awk command below this (to remove 16s sequences).
+#Therefore, I will probably have to re-do this for each individual file, if necessary. Why? Because this file contains all the 16s ids along with their sequences.
+
 # remove 16S seqs from full dataset
 awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' SRR1646851.merge.fastq.assembled.fastq | grep -Ff sortmerna/out/aligned.16S.ids - | tr "\t" "\n" > filtered.fastq
-awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' ERR3484xx.fastq.gz_trim.fastq | grep -Ff sortmerna_ERR3484xx/out/aligned.16S.ids - | tr "\t" "\n" > ERR348412_filtered.fastq
+awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' ERR3484xx.fastq.gz_trim.fastq | grep -Ff sortmerna_ERR3484xx/out/aligned.16S.ids - | tr "\t" "\n" > ERR3484xx_filtered.fastq
 # I did this for each read individually, hence, "xx"
+
+#The next step is to merge all the ERR3484xx_filtered.fastq files into one file to use later on. 
+cat ERR3484xx_filtered.fastq > project_filtered.fastq  #xx = 07 until 22
+
 ###########
 # ALIGNMENT
 ###########
