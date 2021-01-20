@@ -42,12 +42,29 @@ cd sortmerna/out/
 seqtk seq -a aligned.fastq > aligned.fasta 
 # how many 16S sequences?
 grep "^>" aligned.fasta -c 
-# 1360474
+#ERR348407: 6104949 
+#ERR348408: 7901918 
+#ERR348409: 5440810 
+#ERR348410: 6576728 
+#ERR348411: 5476873 
+#ERR348412: 7595046 
+#ERR348413: 7765705 
+#ERR348414: 5318011 
+#ERR348415: 6163219 
+#ERR348416: 5354819 
+#ERR348417: 5278476 
+#ERR348418: 6819399
+#ERR348419: 4990145 
+#ERR348420: 4638782 
+#ERR348421: 5078364 
+#ERR348422: 5435179 
 grep "^>" aligned.fasta | sed 's/>//' | awk '{print $1}' > aligned.16S.ids
 cd ../..
 seqtk subseq SRR1646851.merge.fastq.assembled.fastq sortmerna/out/aligned.16S.ids > filtered.16S.fastq
+seqtk subseq project_merged_trimmed.fastq project_aligned.16s.ids > project_filtered.16S.fastq 
 # remove 16S seqs from full dataset
 awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' SRR1646851.merge.fastq.assembled.fastq | grep -Ff sortmerna/out/aligned.16S.ids - | tr "\t" "\n" > filtered.fastq
+awk '{ if ((NR>1)&&($0~/^>/)) { printf("\n%s", $0); } else if (NR==1) { printf("%s", $0); } else { printf("\t%s", $0); } }' project_merged_trimmed.fastq | grep -Ff project_aligned.16s.ids - | tr "\t" "\n" > project_filtered.fastq
 
 ###########
 # ALIGNMENT
