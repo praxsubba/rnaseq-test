@@ -98,15 +98,7 @@ STAR --runMode genomeGenerate \
 	--sjdbGTFfile ALL_genomes.gtf \
 	--genomeChrBinNbits 15
 # map to reference genomes
-STAR --runThreadN 4 \
-	--genomeDir GenomeDir \
-	--readFilesIn filtered.fastq \
-	--outFileNamePrefix star-results \
-	--outSAMtype BAM SortedByCoordinate \
-	--outReadsUnmapped unmapped.bam \
-	--quantMode TranscriptomeSAM GeneCounts \
-	--alignIntronMax 1 \
-	--chimOutType SeparateSAMold 
+STAR --runThreadN 4 --genomeDir /home/prakrit/merged_fastq_files/GenomeDir --readFilesIn project_filtered.fastq --outFileNamePrefix star-results --outSAMtype BAM SortedByCoordinate --outReadsUnmapped unmapped.bam --quantMode TranscriptomeSAM GeneCounts --alignIntronMax 1 --chimOutType SeparateSAMold 
 
 #################
 # GET GENE COUNTS
@@ -114,12 +106,16 @@ STAR --runThreadN 4 \
 # convert bam to sam formatted file
 samtools view -h -o \
 	star-resultsAligned.toTranscriptome.out.sam \
-	star-resultsAligned.toTranscriptome.out.bam
+	star-resultsAligned.toTranscriptome.out.bam #Allie
+
+samtools view -h -o star-resultsAligned.toTranscriptome.out.sam star-resultsAligned.toTranscriptome.out.bam #Prax
 # what genes were identified?
 wget http://www.homd.org/ftp/HOMD_prokka_genomes/tsv/ALL_genomes.tsv
 # pull from locus id
 grep -v "^@" star-resultsAligned.toTranscriptome.out.sam | awk -F"\t" '{print $3}' | while read line; do grep -w -m 1 $line ALL_genomes.tsv ; done > test.txt
 
+#Prax
+grep -v "^@" /home/prakrit/merged_fastq_files/GenomeDir/star-resultsAligned.toTranscriptome.out.sam | awk -F"\t" '{print $3}' | while read line; do grep -w -m 1 $line ALL_genomes.tsv ; done > gene_counts.txt
 
 
 
