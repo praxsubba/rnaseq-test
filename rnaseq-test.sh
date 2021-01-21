@@ -15,6 +15,7 @@ unzip set1-database.fasta.zip
 ############################
 # ACTIVATE CONDA ENVIRONMENT
 ############################
+#Make sure to copy the .yml file to your working directory
 conda env create -f environment.yml
 conda activate rnaseq-test
 # to deactivate:
