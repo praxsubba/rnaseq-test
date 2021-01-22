@@ -117,7 +117,8 @@ grep -v "^@" star-resultsAligned.toTranscriptome.out.sam | awk -F"\t" '{print $3
 #Prax
 grep -v "^@" /home/prakrit/merged_fastq_files/GenomeDir/star-resultsAligned.toTranscriptome.out.sam | awk -F"\t" '{print $3}' | while read line; do grep -w -m 1 $line ALL_genomes.tsv ; done > gene_counts.txt
 
-
+#Generate gene counts
+cat gene_counts.txt | sort | uniq -c
 
 
 
