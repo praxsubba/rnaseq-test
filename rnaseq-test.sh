@@ -109,8 +109,10 @@ samtools view -h -o \
 	star-resultsAligned.toTranscriptome.out.bam #Allie
 
 samtools view -h -o star-resultsAligned.toTranscriptome.out.sam star-resultsAligned.toTranscriptome.out.bam #Prax
-# what genes were identified?
+
+#### what genes were identified? #####
 wget http://www.homd.org/ftp/HOMD_prokka_genomes/tsv/ALL_genomes.tsv
+#### Option 1 ##### (Did not use this)
 # pull from locus id
 grep -v "^@" star-resultsAligned.toTranscriptome.out.sam | awk -F"\t" '{print $3}' | while read line; do grep -w -m 1 $line ALL_genomes.tsv ; done > test.txt
 
@@ -120,7 +122,14 @@ grep -v "^@" /home/prakrit/merged_fastq_files/GenomeDir/star-resultsAligned.toTr
 #Generate gene counts
 cat gene_counts.txt | sort | uniq -c
 
+####Option 2 #### (This is the one that I ended up using)
 
+# featureCounts is a highly efficient general-purpose read summarization program that counts mapped reads for genomic features such as genes, exons, promoter, gene bodies, genomic bins and chromosomal locations. featureCounts takes as input SAM/BAM files and an annotation file including chromosomal coordinates of features. It outputs numbers of reads assigned to features (or meta-features). It also outputs stat info for the overall summrization results, including number of successfully assigned reads and number of reads that failed to be assigned due to various reasons (these reasons are included in the stat info). We can run this on all SAM/BAM files at the same time.
+
+featureCounts -a ALL_genomes.gtf -F GTF -o ERR3484xx_countMatrix.txt star-results_ERR3484xxAligned.sortedByCoord.out.bam -g transcript_id
+
+#Keep the Gene ID and counts from the ERR3484xx_countMatrix.txt output file (i.e., the first and seventh column)
+cut -f 1,7 ERR348422_countMatrix.txt > ERR348422_countMatrix_clean.txt
 
 
 
