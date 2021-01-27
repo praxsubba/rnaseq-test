@@ -4,6 +4,16 @@ setwd("C:/Users/praxs/Box/My Box Notes/RIchards Lab Data/FeatureCount Data/")
 # Load counts data
 countdata <- read.table("Patients_1_2_3_4_final.txt", header=TRUE, row.names=1)
 
+##How does the counts data table look like?
+#Geneid	ERR348407	ERR348408	ERR348409	ERR348410	ERR348411	ERR348412	ERR348413	ERR348414	ERR348415	ERR348416	ERR348417	ERR348418	ERR348419	ERR348420	ERR348421	ERR348422
+#SEQF1003_00003	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+#SEQF1003_00005	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+#SEQF1003_00006	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+#SEQF1003_00007	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+#SEQF1003_00017	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+#SEQF1003_00033	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+
+
 #Convert into matrix
 countdata <- as.matrix(countdata)
 head(countdata)
